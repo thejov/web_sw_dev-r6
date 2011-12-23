@@ -13,24 +13,26 @@ def continent_json(request, continent_code):
         if country.continent.code == continent_code:
             cont_countries[country.code] = country.name
 
-    continent_s = json.dumps(cont_countries, sort_keys=True, indent=2 * ' ')
+    json_dump = json.dumps(cont_countries, sort_keys=True, indent=2 * ' ')
 
     if request.GET.has_key("callback"):
         callback = request.GET.get("callback")
-        continent_s = '%s(%s)' % (callback, continent_s)
+        json_dump = '%s(%s)' % (callback, json_dump)
 
-    return HttpResponse(continent_s, mimetype="application/json")
+    return HttpResponse(json_dump, mimetype='application/json; charset=utf-8')
 
 def country_json(request, continent_code, country_code):
     """ Write your answer in 6.2 here. """
     country = get_object_or_404(Country, code = country_code)
-    country_s = json.dumps({"area" : country.area, "population" : country.population, "capital" : country.capital}, sort_keys=True, indent=2 * ' ')
+    if country.continent.code != continent_code:
+        raise Http404
+    json_dump = json.dumps({"area" : country.area, "population" : country.population, "capital" : country.capital}, sort_keys=True, indent=2 * ' ')
 
     if request.GET.has_key("callback"):
         callback = request.GET.get("callback")
-        country_s = '%s(%s)' % (callback, country_s)
+        json_dump = '%s(%s)' % (callback, json_dump)
 
-    return HttpResponse(country_s, mimetype="application/json")
+    return HttpResponse(json_dump, mimetype='application/json; charset=utf-8')
 
 
 def show_continent(request, continent_code=None):
