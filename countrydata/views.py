@@ -39,8 +39,18 @@ def show_continent(request, continent_code=None):
         continent = get_object_or_404(Continent, code=continent_code)
         context["continent"] = continent
 
-    # Add your answer in 6.3 here
-    return render_to_response("countrydata/index.html", context)
+        # Add your answer in 6.3 here
+        countries = Country.objects.all()
+        cont_countries = []
+        for country in countries:
+            if country.continent.code == continent_code:
+                cont_countries.append(country)
+        context["countries"] = cont_countries
+
+    if request.is_ajax():
+        return render_to_response("countrydata/countrytable.html", context)
+    else:
+        return render_to_response("countrydata/index.html", context)
 
 def render_javascript(request):
     """ NOTE: This is a really bad way of serving a static file!

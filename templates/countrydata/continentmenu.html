@@ -1,1 +1,12 @@
-<!-- Write your answer in 6.3 here -->
+<ul id="continentMenu">
+    {% for continent in all_continents %}
+
+    <li>
+        {# insert-path-to-continent-using-the-template #}
+        {# {% url path.to.some_view v1 v2 %} #}
+
+        <a href={% url countrydata.views.show_continent continent.code %}>{{ continent.name }}</a>
+    </li>
+
+    {% endfor %}
+</ul>
