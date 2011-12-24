@@ -13,7 +13,7 @@ def continent_json(request, continent_code):
         if country.continent.code == continent_code:
             cont_countries[country.code] = country.name
 
-    json_dump = json.dumps(cont_countries, sort_keys=True, indent=2 * ' ')
+    json_dump = json.dumps(cont_countries)#, sort_keys=True)#, indent=2 * ' ')
 
     if request.GET.has_key("callback"):
         callback = request.GET.get("callback")
@@ -26,7 +26,7 @@ def country_json(request, continent_code, country_code):
     country = get_object_or_404(Country, code = country_code)
     if country.continent.code != continent_code:
         raise Http404
-    json_dump = json.dumps({"area" : country.area, "population" : country.population, "capital" : country.capital}, sort_keys=True, indent=2 * ' ')
+    json_dump = json.dumps({"area" : country.area, "population" : country.population, "capital" : country.capital})#, sort_keys=True)#, indent=2 * ' ')
 
     if request.GET.has_key("callback"):
         callback = request.GET.get("callback")
